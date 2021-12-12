@@ -22,7 +22,7 @@ def get_parser():
     )
     parser.add_argument(
         "--config-file",
-        default="configs/BAText/TotalText/v2_attn_R_50.yaml",
+        default="/aic2021/AdelaiDet/configs/BAText/TotalText/v2_attn_R_50.yaml",
         metavar="FILE",
         help="path to config file",
     )
