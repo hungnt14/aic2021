@@ -18,7 +18,7 @@ def download_config(id):
     # url = 'https://raw.githubusercontent.com/pbcquoc/vietocr/master/config/{}'.format(id)
     # r = requests.get(url)
     config_text = ""
-    fp = open("/aic/vietocr/config/{}".format(id), "r")
+    fp = open("/aic2021/vietocr/config/{}".format(id), "r")
     config_text = fp.read()
     fp.close()
     config = yaml.safe_load(config_text)
