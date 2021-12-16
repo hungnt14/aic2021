@@ -3,6 +3,7 @@ import cv2
 import glob
 import os
 from os import walk
+import time
 import argparse
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -32,6 +33,10 @@ config['vocab'] = 'aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶ�
 detector = Predictor(config)
 
 detect_files = glob.glob(args.original_detect + "*")
+
+countBbox = 0
+
+start_time = time.time()
 
 for detect_file in detect_files:
   detect_filename = os.path.basename(detect_file)
@@ -69,6 +74,7 @@ for detect_file in detect_files:
       for i, box in enumerate(boxes):
         seperated_content += box
         seperated_content += ('\n' if i == 8 else ',')
+      countBbox += 1
 
   # write seperated
   f = open(args.seperated + detect_filename, 'w', encoding="utf-8")
@@ -81,3 +87,7 @@ for detect_file in detect_files:
   f.close()
 
   print("Done", detect_filename)
+
+end_time = time.time()
+
+print("============ FINISHED #1 RECOGNITION (time elapsed: {}). TOTAL RECOGNIZED BBOX: {} ============".format(str(countBbox), str(end_time - start_time)))
