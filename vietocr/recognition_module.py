@@ -90,4 +90,4 @@ for detect_file in detect_files:
 
 end_time = time.time()
 
-print("============ FINISHED #1 RECOGNITION (time elapsed: {}). TOTAL RECOGNIZED BBOX: {} ============".format(str(countBbox), str(end_time - start_time)))
+print("============ FINISHED #1 RECOGNITION (time elapsed: {}). TOTAL RECOGNIZED BBOX: {} ============".format(str(end_time - start_time), str(countBbox)))
