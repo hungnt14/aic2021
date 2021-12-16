@@ -88,4 +88,4 @@ if __name__ == "__main__":
             print("Done", filename, "-", str(id) + "/" + str(len(files)))
     end_time = time.time()
     
-    print("============ FINISHED DETECTION (time elapsed: {}). TOTAL DETECTED BBOX: {} ============".format(str(countBbox), str(end_time - start_time)))
+    print("============ FINISHED DETECTION (time elapsed: {}). TOTAL DETECTED BBOX: {} ============".format(str(end_time - start_time), str(countBbox)))
