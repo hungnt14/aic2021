@@ -15,9 +15,13 @@ def download_weights(id_or_url, cached=None, md5=None, quiet=False):
 
 
 def download_config(id):
-    url = 'https://raw.githubusercontent.com/pbcquoc/vietocr/master/config/{}'.format(id)
-    r = requests.get(url)
-    config = yaml.safe_load(r.text)
+    # url = 'https://raw.githubusercontent.com/pbcquoc/vietocr/master/config/{}'.format(id)
+    # r = requests.get(url)
+    config_text = ""
+    fp = open("/aic/vietocr/config/{}".format(id), "r")
+    config_text = fp.read()
+    fp.close()
+    config = yaml.safe_load(config_text)
     return config
 
 def compute_accuracy(ground_truth, predictions, mode='full_sequence'):
