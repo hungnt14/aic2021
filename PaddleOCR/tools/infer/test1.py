@@ -91,7 +91,7 @@ class TextSystem(object):
           if abs(bb[0, 0] - bb[1, 0]) < abs(bb[0, 1] - bb[1, 1]):
             bb=bb[[0, 3, 2, 1]]
           dt_boxes.append(bb)
-        # print(dt_boxes)
+        print(dt_boxes)
         img_crop_list = []
         dt_boxes = np.array(dt_boxes)
         dt_boxes = sorted_boxes(dt_boxes)
