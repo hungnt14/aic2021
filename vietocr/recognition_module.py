@@ -46,7 +46,7 @@ for detect_file in detect_files:
 
   for bbox_path in bboxes_path:
     img = Image.open(bbox_path)
-    text, prob = detector.predict(img, return_prob=True)
+    text, prob = detector.predict_batch(img, return_prob=True)
     text = ("###" if prob < float(args.drop_score) else text)
     bboxes_labels.append(text)
   
