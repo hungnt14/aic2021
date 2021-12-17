@@ -1,16 +1,3 @@
-# Copyright (c) 2020 PaddlePaddle Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 import os
 import sys
 import subprocess
@@ -91,7 +78,7 @@ class TextSystem(object):
           if abs(bb[0, 0] - bb[1, 0]) < abs(bb[0, 1] - bb[1, 1]):
             bb=bb[[0, 3, 2, 1]]
           dt_boxes.append(bb)
-        #print(dt_boxes)
+        # print(dt_boxes)
         img_crop_list = []
         dt_boxes = np.array(dt_boxes)
         dt_boxes = sorted_boxes(dt_boxes)
@@ -140,7 +127,6 @@ def sorted_boxes(dt_boxes):
 
 
 def main(args):
-    print("Used args", args)
     image_file_list = get_image_file_list(args.image_dir)
     image_file_list = image_file_list[args.process_id::args.total_process_num]
     text_sys = TextSystem(args)
@@ -159,7 +145,6 @@ def main(args):
     cpu_mem, gpu_mem, gpu_util = 0, 0, 0
     _st = time.time()
     count = 0
-    countBbox = 0
     for idx, image_file in enumerate(image_file_list):
 
         img, flag = check_and_read_gif(image_file)
@@ -209,11 +194,11 @@ def main(args):
         save_pred = np.array(dt_boxes).astype(np.int32).tolist()
         label_text=open(args.output+os.path.basename(image_file)+'.txt', "a")
         for i in range(len(save_pred)):
-          countBbox += 1
           label = str(save_pred[i][0][0])+','+str(save_pred[i][0][1])+','+str(save_pred[i][1][0])+','+str(save_pred[i][1][1])+','+str(save_pred[i][2][0])+','+str(save_pred[i][2][1])+','+str(save_pred[i][3][0])+','+str(save_pred[i][3][1])+','+txts[i]+"\n"
           label_text.write(label)
         label_text.close()
-    logger.info("============ FINISHED #2 RECOGNITION (time elapsed: {}). TOTAL RECOGNIZED BBOX: {} ============".format(str(total_time), str(countBbox)))
+    logger.info("The predict total time is {}".format(time.time() - _st))
+    logger.info("\nThe predict total time is {}".format(total_time))
 
 
 if __name__ == "__main__":
