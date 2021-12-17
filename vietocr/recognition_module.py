@@ -38,7 +38,7 @@ countBbox = 0
 
 start_time = time.time()
 
-for detect_file in detect_files:
+for id, detect_file in enumerate(detect_files):
   detect_filename = os.path.basename(detect_file)
   original_name = detect_filename.split(".")[0]
   bboxes_path = natsorted(glob.glob(args.cropped_bboxes + original_name + "-*"))
@@ -87,7 +87,7 @@ for detect_file in detect_files:
   f.write(seperated_null_content)
   f.close()
 
-  print("Done", detect_filename)
+  print("Done", detect_filename, "- {}/{}".format(str(id + 1), len(detect_files)))
 
 end_time = time.time()
 

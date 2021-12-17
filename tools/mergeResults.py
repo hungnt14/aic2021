@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
   files1 = natsorted(glob.glob(args.input1 + "*"))
 
-  for filepath1 in files1:
+  for id, filepath1 in enumerate(files1):
     filename = os.path.basename(filepath1)
     
     filepath2 = args.input2 + filename
@@ -41,5 +41,5 @@ if __name__ == "__main__":
     f.write(lines)
     f.close()
     
-    print("Done merged file: ", filename)
- print("============ FINISHED FINAL MERGE (time elapsed: {}). TOTAL RECOGNIZED BBOX: {} ============".format(str(time.time() - start_time)))
+    print("Done", filename, "- {}/{}".format(str(id + 1), len(files1)))
+  print("============ FINISHED FINAL MERGE (time elapsed: {}). ALL DONE ============".format(str(time.time() - start_time)))

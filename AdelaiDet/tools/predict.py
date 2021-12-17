@@ -49,7 +49,7 @@ if __name__ == "__main__":
     cfg = prepare_cfg(args)
     predictor = DefaultPredictor(cfg)
     
-    print('Read predictor successfully. We are ready for predictions')
+    print('Ready for predictions!')
     
     list_txts = []
     start_time = time.time()
@@ -85,7 +85,7 @@ if __name__ == "__main__":
             f_submission = open(args.output + filename + ".txt", 'w', encoding="utf-8")
             f_submission.write(content)
             f_submission.close()
-            print("Done", filename, "-", str(id + 1) + "/" + str(len(files)))
+            print("Done", filename, "- {}/{}".format(str(id + 1), len(files)))
     end_time = time.time()
     
     print("============ FINISHED DETECTION (time elapsed: {}). TOTAL DETECTED BBOX: {} ============".format(str(end_time - start_time), str(countBbox)))
