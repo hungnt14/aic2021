@@ -158,6 +158,7 @@ def main(args):
     cpu_mem, gpu_mem, gpu_util = 0, 0, 0
     _st = time.time()
     count = 0
+    countBbox = 0
     for idx, image_file in enumerate(image_file_list):
 
         img, flag = check_and_read_gif(image_file)
@@ -207,11 +208,11 @@ def main(args):
         save_pred = np.array(dt_boxes).astype(np.int32).tolist()
         label_text=open(args.output+os.path.basename(image_file)+'.txt', "a")
         for i in range(len(save_pred)):
+          countBbox += 1
           label = str(save_pred[i][0][0])+','+str(save_pred[i][0][1])+','+str(save_pred[i][1][0])+','+str(save_pred[i][1][1])+','+str(save_pred[i][2][0])+','+str(save_pred[i][2][1])+','+str(save_pred[i][3][0])+','+str(save_pred[i][3][1])+','+txts[i]+"\n"
           label_text.write(label)
         label_text.close()
-    logger.info("The predict total time is {}".format(time.time() - _st))
-    logger.info("\nThe predict total time is {}".format(total_time))
+    logger.info("============ FINISHED #2 RECOGNITION (time elapsed: {}). TOTAL RECOGNIZED BBOX: {} ============".format(str(total_time), str(countBbox)))
 
 
 if __name__ == "__main__":
