@@ -1,6 +1,7 @@
 import argparse
 import os
 import glob
+import time
 from natsort import natsorted
 
 def get_parser():
@@ -11,6 +12,7 @@ def get_parser():
   return parser
 
 if __name__ == "__main__":
+  start_time = time.time()
   args = get_parser().parse_args()
 
   files1 = natsorted(glob.glob(args.input1 + "*"))
@@ -38,5 +40,6 @@ if __name__ == "__main__":
     f = open(args.output + filename, "w", encoding="utf-8")
     f.write(lines)
     f.close()
-
-    print("Done", filename)
+    
+    print("Done merged file: ", filename)
+ print("============ FINISHED FINAL MERGE (time elapsed: {}). TOTAL RECOGNIZED BBOX: {} ============".format(str(time.time() - start_time)))
