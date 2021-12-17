@@ -140,6 +140,7 @@ def sorted_boxes(dt_boxes):
 
 
 def main(args):
+    print("Used args", args)
     image_file_list = get_image_file_list(args.image_dir)
     image_file_list = image_file_list[args.process_id::args.total_process_num]
     text_sys = TextSystem(args)
