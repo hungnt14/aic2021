@@ -43,11 +43,12 @@ for detect_file in detect_files:
   original_name = detect_filename.split(".")[0]
   bboxes_path = natsorted(glob.glob(args.cropped_bboxes + original_name + "-*"))
   bboxes_labels = []
-
-  for bbox_path in bboxes_path:
-    img = Image.open(bbox_path)
-    text, prob = detector.predict_batch(img, return_prob=True)
-    text = ("###" if prob < float(args.drop_score) else text)
+  
+  imgs = [Image.open(x) for x in bboxes_path]
+  texts, probs = detector.predict_batch(imgs, return_prob=True)
+  for text, prob in zip(texts, probs):
+    if (prob < float(args.drop_score)):
+      text = "###"
     bboxes_labels.append(text)
   
   # read from original detect
