@@ -4,13 +4,16 @@ from detectron2.utils.visualizer import Visualizer
 import matplotlib.colors as mplc
 import matplotlib.font_manager as mfm
 
+EN_CTLABELS = [' ','!','"','#','$','%','&','\'','(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','[','\\',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','{','|','}','~']
+VI_CTLABELS = [' ','!','"','#','$','%','&',"\'",'(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','[','\\',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','{','|','}','~','ˋ','ˊ','﹒','ˀ','˜','ˇ','ˆ','˒','‑']
+
 class TextVisualizer(Visualizer):
     def __init__(self, image, metadata, instance_mode, cfg):
         Visualizer.__init__(self, image, metadata, instance_mode=instance_mode)
         self.voc_size = cfg.MODEL.BATEXT.VOC_SIZE
         self.use_customer_dictionary = cfg.MODEL.BATEXT.CUSTOM_DICT
         if not self.use_customer_dictionary:
-            self.CTLABELS = [' ','!','"','#','$','%','&','\'','(',')','*','+',',','-','.','/','0','1','2','3','4','5','6','7','8','9',':',';','<','=','>','?','@','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','[','\\',']','^','_','`','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','{','|','}','~']
+            self.CTLABELS = VI_CTLABELS
         else:
             with open(self.use_customer_dictionary, 'rb') as fp:
                 self.CTLABELS = pickle.load(fp)
@@ -38,17 +41,15 @@ class TextVisualizer(Visualizer):
         return points
 
     def _decode_recognition(self, rec):
-        s = ''
+        s = ""
         for c in rec:
             c = int(c)
-            if c < self.voc_size - 1:
-                if self.voc_size == 96:
-                    s += self.CTLABELS[c]
-                else:
-                    s += str(chr(self.CTLABELS[c]))
-            elif c == self.voc_size -1:
-                s += u'口'
-        return s
+            if c < 104:
+                s += self.CTLABELS[c]
+            elif c == 104:
+                s += u"口"
+        return "" # aic2021: we only use as a detect
+        #return s
 
     def _ctc_decode_recognition(self, rec):
         # ctc decoding
@@ -58,13 +59,9 @@ class TextVisualizer(Visualizer):
             c = int(c)
             if c < self.voc_size - 1:
                 if last_char != c:
-                    if self.voc_size == 96:
-                        s += self.CTLABELS[c]
-                        last_char = c
-                    else:
-                        s += str(chr(self.CTLABELS[c]))
-                        last_char = c
-            elif c == self.voc_size -1:
+                      s += self.CTLABELS[c]
+                      last_char = c
+            elif c == self.voc_size - 1:
                 s += u'口'
             else:
                 last_char = False
@@ -79,7 +76,8 @@ class TextVisualizer(Visualizer):
 
             # draw text in the top left corner
             text = self._decode_recognition(rec)
-            text = "{:.3f}: {}".format(score, text)
+            # text = "{:.3f}: {}".format(score, text)
+            text = ""
             lighter_color = self._change_color_brightness(color, brightness_factor=0.7)
             text_pos = polygon[0]
             horiz_align = "left"
@@ -127,35 +125,17 @@ class TextVisualizer(Visualizer):
         color[np.argmax(color)] = max(0.8, np.max(color))
         
         x, y = position
-        if draw_chinese:
-            font_path = "./simsun.ttc"
-            prop = mfm.FontProperties(fname=font_path)
-            self.output.ax.text(
-                x,
-                y,
-                text,
-                size=font_size * self.output.scale,
-                family="sans-serif",
-                bbox={"facecolor": "black", "alpha": 0.8, "pad": 0.7, "edgecolor": "none"},
-                verticalalignment="top",
-                horizontalalignment=horizontal_alignment,
-                color=color,
-                zorder=10,
-                rotation=rotation,
-                fontproperties=prop
-            )
-        else:
-            self.output.ax.text(
-                x,
-                y,
-                text,
-                size=font_size * self.output.scale,
-                family="sans-serif",
-                bbox={"facecolor": "black", "alpha": 0.8, "pad": 0.7, "edgecolor": "none"},
-                verticalalignment="top",
-                horizontalalignment=horizontal_alignment,
-                color=color,
-                zorder=10,
-                rotation=rotation,
-            )
+        self.output.ax.text(
+            x,
+            y,
+            text,
+            size=font_size * self.output.scale,
+            family="sans-serif",
+            bbox={"facecolor": "black", "alpha": 0.8, "pad": 0.7, "edgecolor": "none"},
+            verticalalignment="top",
+            horizontalalignment=horizontal_alignment,
+            color=color,
+            zorder=10,
+            rotation=rotation,
+        )
         return self.output
